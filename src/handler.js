@@ -66,18 +66,60 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = (request, h) => {
-  const simpleBooks = books.map((book) => ({
-    id: book.id,
-    name: book.name,
-    publisher: book.publisher,
-  }));
+  const bookName = request.query.name;
+  const bookReading = request.query.reading;
+  const bookFinished = request.query.finished;
 
-  return {
-    status: 'success',
-    data: {
-      books: simpleBooks,
-    },
-  };
+  if (bookName) {
+    // QUERY = NAME
+    const queryBookName = books.filter((book) => {
+      return book.name.toLowerCase() === bookName.toLowerCase();
+    });
+
+    return {
+      status: 'success',
+      data: {
+        books: queryBookName,
+      },
+    };
+  } else if (bookReading) {
+    // QUERY READING
+    const queryBookReading = books.filter((book) => {
+      return book.reading === (bookReading === '1');
+    });
+
+    return {
+      status: 'success',
+      data: {
+        books: queryBookReading,
+      },
+    };
+  } else if (bookFinished) {
+    // QUERY FINISH = pageCount = readPage
+    const queryBookFinished = books.filter((book) => {
+      return book.finished === (bookFinished === '1');
+    });
+
+    return {
+      status: 'success',
+      data: {
+        books: queryBookFinished,
+      },
+    };
+  } else {
+    const simpleBooks = books.map((book) => ({
+      id: book.id,
+      name: book.name,
+      publisher: book.publisher,
+    }));
+
+    return {
+      status: 'success',
+      data: {
+        books: simpleBooks,
+      },
+    };
+  }
 };
 
 const getBookByIdHandler = (request, h) => {
@@ -95,6 +137,7 @@ const getBookByIdHandler = (request, h) => {
     response.code(200);
     return response;
   };
+
   const response = h.response({
     status: 'fail',
     message: 'Buku tidak ditemukan',
@@ -150,6 +193,7 @@ const editBookByIdHandler = (request, h) => {
       reading,
       updatedAt,
     };
+
     const response = h.response({
       status: 'success',
       message: 'Buku berhasil diperbarui',
