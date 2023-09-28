@@ -67,41 +67,69 @@ const addBookHandler = (request, h) => {
 };
 
 const getAllBooksHandler = (request, h) => {
-  const {name, reading, finished} = request.query;
+  const bookName = request.query.name;
+  const bookReading = request.query.reading;
+  const bookFinished = request.query.finished;
 
-  let filteredBooks = books;
-
-  if (name !== undefined) {
-    filteredBooks = filteredBooks.filter((book) => book
-        .name.toLowerCase().includes(name.toLowerCase()));
-  }
-
-  if (reading !== undefined) {
-    filteredBooks = filteredBooks.filter((book) => {
-      return book.reading === !!Number(reading);
+  if (bookName) {
+    // QUERY = NAME
+    const queryBookName = books.filter((book) => {
+      return book.name.toLowerCase().includes(bookName.toLowerCase());
     });
-  }
 
-  if (finished !== undefined) {
-    filteredBooks = filteredBooks.filter((book) => {
-      return book.finished === !!Number(finished);
+    return {
+      status: 'success',
+      data: {
+        books: queryBookName,
+      },
+    };
+  } else if (bookReading) {
+    // QUERY READING
+    const queryBookReading = books.filter((book) => {
+      return book.reading === (bookReading === '1');
     });
+
+    return {
+      status: 'success',
+      data: {
+        books: queryBookReading,
+      },
+    };
+  } else if (bookFinished) {
+    // QUERY FINISH = pageCount = readPage
+    if (bookFinished === '1' || bookFinished === '0') {
+      const queryBookFinished = books.filter((book) => {
+        return book.finished === (bookFinished === '1');
+      });
+
+      return {
+        status: 'success',
+        data: {
+          books: queryBookFinished,
+        },
+      };
+    } else {
+      return {
+        status: 'success',
+        data: {
+          books,
+        },
+      };
+    }
+  } else {
+    const simpleBooks = books.map((book) => ({
+      id: book.id,
+      name: book.name,
+      publisher: book.publisher,
+    }));
+
+    return {
+      status: 'success',
+      data: {
+        books: simpleBooks,
+      },
+    };
   }
-
-  const response = h.response({
-    status: 'success',
-    data: {
-      books: filteredBooks.map((book) => ({
-        id: book.id,
-        name: book.name,
-        publisher: book.publisher,
-      })),
-    },
-  });
-
-  response.code(200);
-
-  return response;
 };
 
 const getBookByIdHandler = (request, h) => {

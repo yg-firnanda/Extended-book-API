@@ -1,0 +1,20 @@
+npm install
+
+To check error of ESLint, type : npm run lint
+
+Dummy
+{
+    "name": "Dicoding",
+    "year": 1945,
+    "author": "Muzaki",
+    "summary": "Hahaha",  
+    "publisher": "Gramedia",
+    "pageCount": 100,
+    "readPage": 100,
+    "reading": true
+}
+
+
+Perbedaan antara kode js old code_reviewer dan handler hanya terletak pada variabel getAllBooksHandler saja.
+
+Dan untuk perbedaan getAllBooksHandler pada handler.js dan code_reviewe.js hanya pada return dari filter

@@ -78,13 +78,13 @@ const getAllBooksHandler = (request, h) => {
 
   if (reading !== undefined) {
     filteredBooks = filteredBooks.filter((book) => {
-      return book.reading === !!Number(reading);
+      book.reading === !!Number(reading);
     });
   }
 
   if (finished !== undefined) {
     filteredBooks = filteredBooks.filter((book) => {
-      return book.finished === !!Number(finished);
+      book.finished === !!Number(finished);
     });
   }
 
@@ -98,7 +98,6 @@ const getAllBooksHandler = (request, h) => {
       })),
     },
   });
-
   response.code(200);
 
   return response;
